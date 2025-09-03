@@ -55,9 +55,9 @@ class EventSchema(EnvelopeObjectSchema):
         'many': 'events',
     }
     __model__ = Event
-    text = fields.Str(missing="")
-    timestamp = UnixTimestampToDatetimeField(missing=0)
-    fields = FieldsListOfDictsToDictField(missing=[])
+    text = fields.Str(load_default="")
+    timestamp = UnixTimestampToDatetimeField(load_default=0)
+    fields = FieldsListOfDictsToDictField(load_default=[])
 
 
 class Events(ServerAddressableObject):
@@ -109,9 +109,9 @@ class Host(RemoteObjectProxy, attrdict.AttrDict):
 @bind_to_model
 class HostSchema(ObjectSchema):
     __model__ = Host
-    hostname = fields.Str(missing=None)
+    hostname = fields.Str(load_default=None)
     lastReceived = fields.DateTime(attribute='last_received')
-    sourcePath = fields.Str(attribute='source', missing=None)
+    sourcePath = fields.Str(attribute='source', load_default=None)
 
 
 class Hosts(collections.Sequence, ServerAddressableObject):
@@ -306,13 +306,13 @@ class RoleSchema(EnvelopeObjectSchema):
     }
     __model__ = Role
     id = fields.Str()
-    description = fields.Str(missing="", default="")
+    description = fields.Str(load_default="", dump_default="")
     name = fields.Str()
     # Capabilities can be a list like ["ANALYTICS", "VIEW_ADMIN"] or a list of hashes like [{'id': 'ANALYTICS'}, {'id': 'VIEW_ADMIN'}]
 
     # Note, an empty capabilities list doesn't make sense.
-    capabilities = fields.List(CapabilityHashOrStringField(), missing=list, default=list)
-    dataSets = fields.List(CapabilityHashOrStringField(), missing=list, default=list)
+    capabilities = fields.List(CapabilityHashOrStringField(), load_default=list, dump_default=list)
+    dataSets = fields.List(CapabilityHashOrStringField(), load_default=list, dump_default=list)
 
 
 class Roles(AppendableServerDictMixin, DirectlyAddressableContainerMapping, ServerDictMixin, ServerAddressableObject):
@@ -360,8 +360,8 @@ class UserSchema(EnvelopeObjectSchema):
     username = fields.Str()
     password = fields.Str(dump_only=True)
     # TODO: Can we subclass fields.Email, but allow zero-length strings (or treat them as None)?
-    email = NullableStringField(missing=None, required=False, allow_none=True)
-    type = fields.Str(missing="DEFAULT")
+    email = NullableStringField(load_default=None, required=False, allow_none=True)
+    type = fields.Str(load_default="DEFAULT")
     apiId = fields.Str()
     groupIds = fields.List(fields.String())
     capabilities = fields.List(fields.String())

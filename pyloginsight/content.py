@@ -195,7 +195,7 @@ class ExtractedFieldSchema(BaseContentSchema):
     regexValue = fields.Str(attribute='regex_value', required=True)
     internalName = fields.Str(attribute='internal_name', required=True)
     info = fields.Str(allow_none=True, required=False)
-    constraints = JsonString(ConstraintSchema, missing=None, allow_none=True, required=True)
+    constraints = JsonString(ConstraintSchema, allow_none=True, required=True)
 
 
 class GroupByFieldSchema(BaseContentSchema):
@@ -232,13 +232,13 @@ class QueryStringSchema(BaseContentSchema):
     compareQueryOrderBy = fields.Str(attribute='compare_query_order_by', required=False)
     piqlFunctionField = fields.Str(attribute='piql_function_field', allow_none=True, required=False)
     shouldGroupByTime = fields.Bool(attribute='should_group_by_time', required=False)
-    fieldConstraints = fields.Nested(FilterSchema, attribute='field_constraints', missing=None, many=True,
+    fieldConstraints = fields.Nested(FilterSchema, attribute='field_constraints', many=True,
                                      required=True)
     constraintToggle = fields.Str(attribute='constraint_toggle', required=False)
     eventSortOrder = fields.Str(attribute='event_sort_order', required=False)
     dateFilterPreset = fields.Str(attribute='date_filter_preset', required=False)
     compareQueryOptions = fields.Str(attribute='compare_query_options', allow_none=True, required=False)
-    supplementalConstraints = fields.Nested(FilterSchema, attribute='supplemental_constraints', missing=None, many=True,
+    supplementalConstraints = fields.Nested(FilterSchema, attribute='supplemental_constraints', many=True,
                                             required=True)
     compareQuerySortOrder = fields.Str(attribute='compare_query_sort_order', required=False)
     messageViewType = fields.Str(attribute='message_view_type', required=False)
@@ -253,8 +253,8 @@ class AlertSchema(BaseContentSchema):
     name = fields.Str(required=True)
     info = fields.Str(allow_none=True)
     alertType = fields.Str(attribute='alert_type', required=True)
-    chartQuery = JsonString(QueryStringSchema, missing="", attribute='chart_query', allow_none=True, required=True)
-    messageQuery = JsonString(QueryStringSchema, missing="", attribute='message_query', allow_none=True, required=False)
+    chartQuery = JsonString(QueryStringSchema, load_default="", attribute='chart_query', allow_none=True)
+    messageQuery = JsonString(QueryStringSchema, load_default="", attribute='message_query', allow_none=True, required=False)
     recommendation = fields.Str(required=False)
     hitCount = fields.Float(attribute='hit_count', required=True)
     hitOperator = fields.Str(attribute='hit_operator', required=True)
@@ -277,7 +277,7 @@ class QueryOptionsSchema(BaseContentSchema):
 class QuerySchema(BaseContentSchema):
     name = fields.Str(required=True)
     chartQuery = JsonString(QueryStringSchema, attribute='chart_query', required=True)
-    messageQuery = JsonString(QueryStringSchema, attribute='message_query', default="", allow_none=True, required=True)
+    messageQuery = JsonString(QueryStringSchema, attribute='message_query', dump_default="", allow_none=True, required=True)
     info = fields.Str(allow_none=True, required=False)
     options = JsonString(QueryOptionsSchema, allow_none=True, required=False)
 
@@ -302,7 +302,7 @@ class RowSchema(BaseContentSchema):
 
 class ViewSchema(BaseContentSchema):
     name = fields.Str(required=True)
-    constraints = fields.Nested(FilterSchema, missing=None, many=True, required=False)  # called constraints, but actually a filter object
+    constraints = fields.Nested(FilterSchema, load_default=None, many=True, required=False)  # called constraints, but actually a filter object
     rows = fields.Nested(RowSchema, many=True, required=True)
 
 
