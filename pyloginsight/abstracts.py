@@ -411,7 +411,7 @@ class EnvelopeObjectSchema(ObjectSchema):
             raise SyntaxWarning("Schema {} has __envelope__ containing None".format(self.__class__))
         return key
 
-    @pre_load(pass_many=True)
+    @pre_load(pass_collection=True)
     def unwrap_envelope(self, data, many):
         key = self.get_envelope_key(many)
         if many and key and isinstance(data[key], Mapping):
