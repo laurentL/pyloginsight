@@ -70,7 +70,7 @@ class BaseSchema(Schema):
         assert key is not None, "Envelope key undefined"
         return key
 
-    @pre_load(pass_many=True)
+    @pre_load(pass_collection=True)
     def unwrap_envelope(self, data, many):
         print("unwrap_envelope called with many=", many, "and data=", data)
         key = self.get_envelope_key(many)
@@ -89,7 +89,7 @@ class BaseSchema(Schema):
         print("unwrap_envelope returning", type(r), ":", r)
         return r
 
-    @post_dump(pass_many=True)
+    @post_dump(pass_collection=True)
     def wrap_with_envelope(self, data, many):
         key = self.get_envelope_key(many)
         return {key: data}

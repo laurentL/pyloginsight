@@ -425,7 +425,7 @@ class EnvelopeObjectSchema(ObjectSchema):
 
         return data[key] if key else data
 
-    @post_dump(pass_many=True)
+    @post_dump(pass_collection=True)
     def wrap_with_envelope(self, data, many):
         key = self.get_envelope_key(many)
         return {key: data}
